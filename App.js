@@ -173,8 +173,7 @@ const App = props => {
   const change = (type, value) => authMachineRef.send({type, value});
 
   // Logging
-  console.log(authState.context)
-  console.log(tokenState.context)
+  console.log('=>', authState.context);
 
   return (
     <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
@@ -191,11 +190,14 @@ const App = props => {
         </View>
       )}
       {RNMachineState.matches('LOGIN') && (
-        <LoginScreen
-          onChangeUsername={val => change('CHANGE_USERNAME', val)}
-          onChangePassword={val => change('CHANGE_PASSWORD', val)}
-          loginButton={() => authMachineRef.send({type: 'SUBMIT_LOGIN'})}
-        />
+        <View style={{flex: 1}}>
+          <Text>{authState.context.errorMsg ?? null}</Text>
+          <LoginScreen
+            onChangeUsername={val => change('CHANGE_USERNAME', val)}
+            onChangePassword={val => change('CHANGE_PASSWORD', val)}
+            loginButton={() => authMachineRef.send({type: 'SUBMIT_LOGIN'})}
+          />
+        </View>
       )}
     </View>
   );

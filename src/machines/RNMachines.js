@@ -27,6 +27,9 @@ export const RNMachine = createMachine({
                 SUCCESS_LOGIN: {
                     target: 'HOME',
                 },
+                FAILED_LOGIN: {
+                    // target: 'HOME',
+                },
             },
             // on: {
             //     // CHANGE_USERNAME: {

@@ -3,7 +3,7 @@ import { createMachine, sendParent, assign, send } from 'xstate';
 
 export const AuthMachine = createMachine({
     id: 'AuthMachine',
-    context: { username: null, password: null, tokenMachineRef: null },
+    context: { username: null, password: null, tokenMachineRef: null, errorMsg: null },
     entry: [
         'tokenMachine',
     ],
@@ -12,29 +12,27 @@ export const AuthMachine = createMachine({
         IDLE: {},
         LOGIN: {
             on: {
-                CHANGE_USERNAME: { actions: 'changeUsername' },
-                CHANGE_PASSWORD: { actions: 'changePassword' },
-                SUBMIT_LOGIN: {
-                    actions: (context, _) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: context.tokenMachineRef }),
-                    // on:
-                    // invoke: {
-                    //     src: (context, _) => context.tokenMachineRef,
-                    //     id: 'tokenMachines',
-                    // },
-                    // entry: (context, event) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: 'tokenMachines' }),
-                    // on: {
-                    //     SUCCESS: {
-
-                    //     }
-                    // }
-                },
+                CHANGE_USERNAME: { actions: 'changeUsernameAction' },
+                CHANGE_PASSWORD: { actions: 'changePasswordAction' },
+                SUBMIT_LOGIN: [
+                    {
+                        cond: 'checkAccountGuard',
+                        actions: sendParent('SUCCESS_LOGIN'),
+                    },
+                    {
+                        actions: assign({
+                            errorMsg: 'Username tidak diizinkan',
+                        }),
+                    }
+                ]
+                // SUBMIT_LOGIN: {
+                //     cond: 'checkAccountGuard',
+                //     actions: 
+                //     // actions: (context, _) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: context.tokenMachineRef }),
+                //     // actions: sendParent('SUCCESS_LOGIN')
+                // },
             },
         },
-        // SUBMIT: {
-        //     // actions: (context, event) =>  console.log(context.username),
-        //     // actions: (context, event) => send({ type: 'AUTH', name: context.username }, { to: 'tokenMachine' }),
-        //     actions: (context, event) => console.log('context, event', context, event),
-        // },
         // LOADING: {
         // on: {
         //     CHANGE_USERNAME: {
@@ -65,7 +63,12 @@ export const AuthMachine = createMachine({
     },
 }, {
     actions: {
-        changeUsername: assign({ username: (_, event) => event.value }),
-        changePassword: assign({ password: (_, event) => event.value }),
+        changeUsernameAction: assign({ username: (_, event) => event.value, errorMsg: null }),
+        changePasswordAction: assign({ password: (_, event) => event.value, errorMsg: null }),
     },
+    guards: {
+        checkAccountGuard: (context, _) => {
+            return context.username === 'pian';
+        }
+    }
 });
