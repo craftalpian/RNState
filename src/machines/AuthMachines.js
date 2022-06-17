@@ -1,39 +1,15 @@
 /* eslint-disable prettier/prettier */
 import { createMachine, sendParent, assign, send } from 'xstate';
 
-const getToken = () => new Promise((res, rej) => res('tokenjwt'));
-const validateUser = (context, event) => new Promise((res, rej) => console.log(event.name));
-
 export const AuthMachine = createMachine({
     id: 'AuthMachine',
     context: { username: null, password: null, tokenMachineRef: null, tokenAuthMachine: null },
     entry: [
         'tokenMachine',
     ],
-    // on: {
-    //     CHANGE_USERNAME: {
-    //         actions: assign({
-    //             username: (_, event) => event.value,
-    //         }),
-    //     },
-    //     CHANGE_PASSWORD: {
-    //         actions: assign({
-    //             password: (_, event) => event.value,
-    //         }),
-    //     },
-    //     SUBMIT_LOGIN: {
-    //         actions: (context, event) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: 'tokenMachine' }),
-    //     },
-    // },
     initial: 'LOGIN',
     states: {
-        IDLE: {
-            on:{
-                LOGIN: {
-                    target: 'LOGIN',
-                },
-            },
-        },
+        IDLE: {},
         LOGIN: {
             on: {
                 CHANGE_USERNAME: {

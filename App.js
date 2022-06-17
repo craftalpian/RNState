@@ -179,7 +179,7 @@ const App = props => {
   return (
     <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
       {RNMachineState.matches('SPLASH') && <SplashScreen />}
-      {RNMachineState.matches('home') && (
+      {RNMachineState.matches('HOME') && (
         <View
           style={{
             justifyContent: 'center',

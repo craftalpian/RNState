@@ -39,8 +39,8 @@ export const RNMachine = createMachine({
             //     },
             // },
         },
-        // home: {
-        //     type: 'final',
-        // },
+        HOME: {
+            type: 'final',
+        },
     },
 });
