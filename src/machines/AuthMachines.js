@@ -3,7 +3,7 @@ import { createMachine, sendParent, assign, send } from 'xstate';
 
 export const AuthMachine = createMachine({
     id: 'AuthMachine',
-    context: { username: null, password: null, tokenMachineRef: null, tokenAuthMachine: null },
+    context: { username: null, password: null, tokenMachineRef: null },
     entry: [
         'tokenMachine',
     ],
@@ -23,7 +23,17 @@ export const AuthMachine = createMachine({
                     }),
                 },
                 SUBMIT_LOGIN: {
-                    actions: (context, event) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: 'tokenMachine' }),
+                    actions: (context, _) => send({type: 'LOGIN', username: context.username, password: context.password}, {to: context.tokenMachineRef}),
+                    // invoke: {
+                    //     src: (context, _) => context.tokenMachineRef,
+                    //     id: 'tokenMachines',
+                    // },
+                    // entry: (context, event) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: 'tokenMachines' }),
+                    // on: {
+                    //     SUCCESS: {
+                            
+                    //     }
+                    // }
                 },
             },
         },

@@ -173,7 +173,7 @@ const App = props => {
   const change = (type, value) => authMachineRef.send({type, value});
 
   // Logging
-  console.log('authState.value', authState.value)
+  console.log('authState.values', authState.value)
   console.log('authState.context', authState.context)
 
   return (
