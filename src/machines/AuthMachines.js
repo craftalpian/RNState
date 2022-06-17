@@ -8,28 +8,31 @@ export const AuthMachine = createMachine({
     id: 'AuthMachine',
     context: { username: null, password: null, tokenMachineRef: null, tokenAuthMachine: null },
     entry: [
-        'createTokenMachine',
+        'tokenMachine',
     ],
-    on: {
-        CHANGE_USERNAME: {
-            actions: assign({
-                username: (_, event) => event.value,
-            }),
-        },
-        CHANGE_PASSWORD: {
-            actions: assign({
-                password: (_, event) => event.value,
-            }),
-        },
-        SUBMIT_LOGIN: {
-            // actions: (context, event) => console.log('SUBMIT_LOGIN SUCCESS'),
-            actions: (context, event) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: 'tokenMachine' }),
-        },
-    },
-    initial: 'IDLE',
+    // on: {
+    //     CHANGE_USERNAME: {
+    //         actions: assign({
+    //             username: (_, event) => event.value,
+    //         }),
+    //     },
+    //     CHANGE_PASSWORD: {
+    //         actions: assign({
+    //             password: (_, event) => event.value,
+    //         }),
+    //     },
+    //     SUBMIT_LOGIN: {
+    //         actions: (context, event) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: 'tokenMachine' }),
+    //     },
+    // },
+    initial: 'LOGIN',
     states: {
         IDLE: {
-
+            on:{
+                LOGIN: {
+                    target: 'LOGIN',
+                },
+            },
         },
         LOGIN: {
             on: {
@@ -43,17 +46,17 @@ export const AuthMachine = createMachine({
                         password: (_, event) => event.value,
                     }),
                 },
-                SUBMIT: {
-
+                SUBMIT_LOGIN: {
+                    actions: (context, event) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: 'tokenMachine' }),
                 },
             },
         },
-        SUBMIT: {
-            // actions: (context, event) =>  console.log(context.username),
-            // actions: (context, event) => send({ type: 'AUTH', name: context.username }, { to: 'tokenMachine' }),
-            actions: (context, event) => console.log('context, event', context, event),
-        },
-        LOADING: {
+        // SUBMIT: {
+        //     // actions: (context, event) =>  console.log(context.username),
+        //     // actions: (context, event) => send({ type: 'AUTH', name: context.username }, { to: 'tokenMachine' }),
+        //     actions: (context, event) => console.log('context, event', context, event),
+        // },
+        // LOADING: {
             // on: {
             //     CHANGE_USERNAME: {
             //         actions: assign({
@@ -67,19 +70,19 @@ export const AuthMachine = createMachine({
             //         target: 'AUTHENTICATION',
             //     },
             // },
-        },
+        // },
         // fetchingToken: {
         //     invoke: {
         //         src: () => getToken(),
         //     },
         // },
-        AUTHENTICATION: {
+        // AUTHENTICATION: {
             // invoke: {
             //     src: 'validateUser',
             // },
             // entry: sendParent('SUCCESS_LOGIN'),
             // entry: (context, event) => console.log(context, event),
-        },
+        // },
     },
 }, {
     services: {

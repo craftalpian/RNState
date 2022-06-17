@@ -19,6 +19,7 @@ export const RNMachine = createMachine({
             },
         },
         LOGIN: {
+            // LOGIN (screen)
             invoke: {
                 src: (context, _) => context.authMachineRef,
             },

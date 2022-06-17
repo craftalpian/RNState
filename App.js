@@ -102,13 +102,13 @@ const LoginScreen = props => {
         <TextInput
           placeholder={'Username'}
           onChangeText={val => props.onChangeUsername(val)}
-          style={{borderWidth: 1, borderRadius: 10}}
+          style={{borderWidth: 1, borderRadius: 10, paddingHorizontal: 8}}
         />
         <View style={{marginTop: 8}} />
         <TextInput
           placeholder={'Password'}
           onChangeText={val => props.onChangePassword(val)}
-          style={{borderWidth: 1, borderRadius: 10}}
+          style={{borderWidth: 1, borderRadius: 10, paddingHorizontal: 8}}
         />
         <View style={{marginTop: 24}} />
         <TouchableHighlight onPress={props.loginButton}>
@@ -129,6 +129,7 @@ const LoginScreen = props => {
 };
 
 const App = props => {
+  // Main Service
   const RNMachineService = useInterpret(RNMachine, {
     actions: {
       createAuth: assign({
@@ -136,7 +137,7 @@ const App = props => {
           spawn(
             AuthMachine.withConfig({
               actions: {
-                createTokenMachine: assign({
+                tokenMachine: assign({
                   tokenMachineRef: () => spawn(TokenMachine, 'tokenMachine'),
                 }),
               },
@@ -147,46 +148,33 @@ const App = props => {
     },
   });
 
+  // Get state from RNMachine
   const RNMachineState = useSelector(RNMachineService, state => state);
 
-  // console.log('state =>', state);
-  // console.log('state.context.authMachineRef =>', state.context.authMachineRef);
-
+  // AuthMachine (Ref)
   const authMachineRef = useSelector(
     RNMachineService,
     state => state.context.authMachineRef,
   );
 
-  // console.log('authMachineRef =>', authMachineRef);
+  // AuthMachine (State)
   const authState = useSelector(authMachineRef, state => state);
 
-  // console.log('authState =>', authState);
-  // console.log('authState =>', authState.value);
-
+  // TokenMachine (Ref)
   const tokenMachineRef = useSelector(
     authMachineRef,
     state => state.context.tokenMachineRef,
   );
 
+  // TokenMachine (State)
   const tokenState = useSelector(tokenMachineRef, state => state);
 
-  // console.log('tokenState =>', tokenState.context);
-  console.log('tokenMachineRef.context =>', tokenState.context);
-  console.log('tokenMachineRef.value =>', tokenState.value);
-  console.log('tokenMachineRef =>', tokenState);
-
-  // const change = (type, value) => service.send({type, value});
-
-  // console.log('service ==>', service)
-  // console.log('tokenMachineRef ==>', tokenMachineRef)
-  // console.log('authMachineRef', authState.value);
-  // console.log('authState.context', authState.context);
-
-  // console.log('RNMachineState.value', RNMachineState.value);
-  // console.log('authState.value', authState.value);
-  // console.log('authState.context', authState.context);
-
+  // Change context inside AuthMachine
   const change = (type, value) => authMachineRef.send({type, value});
+
+  // Logging
+  console.log('authState.value', authState.value)
+  console.log('authState.context', authState.context)
 
   return (
     <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
@@ -202,20 +190,6 @@ const App = props => {
           <Text style={{fontSize: 22, color: '#FFFFFF'}}>Home screen</Text>
         </View>
       )}
-      {/* {RNMachineState.matches('LOGIN') && (
-        <View style={{flex: 1}}>
-          {authState.matches('LOADING') && (
-            <Text style={{fontSize: 20, backgroundColor: 'pink'}}>Loading</Text>
-          )}
-          <LoginPage
-            onChangeUsername={val => change('CHANGE_USERNAME', val)}
-            onChangePassword={val => change('CHANGE_USERNAME', val)}
-          />
-          <TouchableHighlight onPress={() => RNMachineService.send('SUBMIT')}>
-            <Text style={{backgroundColor: 'yellow', fontSize: 24}}>MASUK</Text>
-          </TouchableHighlight>
-        </View>
-      )} */}
       {RNMachineState.matches('LOGIN') && (
         <LoginScreen
           onChangeUsername={val => change('CHANGE_USERNAME', val)}
