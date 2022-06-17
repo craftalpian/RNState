@@ -98,6 +98,9 @@ const LoginScreen = props => {
         }}>
         Login Screen
       </Text>
+      <Text style={{marginVertical: 8, alignSelf: 'center'}}>
+        {props.errorMsg ?? null}
+      </Text>
       <View style={{marginHorizontal: 14}}>
         <TextInput
           placeholder={'Username'}
@@ -191,11 +194,11 @@ const App = props => {
       )}
       {RNMachineState.matches('LOGIN') && (
         <View style={{flex: 1}}>
-          <Text>{authState.context.errorMsg ?? null}</Text>
           <LoginScreen
             onChangeUsername={val => change('CHANGE_USERNAME', val)}
             onChangePassword={val => change('CHANGE_PASSWORD', val)}
             loginButton={() => authMachineRef.send({type: 'SUBMIT_LOGIN'})}
+            errorMsg={authState.context.errorMsg}
           />
         </View>
       )}
