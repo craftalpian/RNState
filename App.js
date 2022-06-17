@@ -173,8 +173,8 @@ const App = props => {
   const change = (type, value) => authMachineRef.send({type, value});
 
   // Logging
-  console.log('authState.values', authState.value)
-  console.log('authState.context', authState.context)
+  console.log(authState.context)
+  console.log(tokenState.context)
 
   return (
     <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>

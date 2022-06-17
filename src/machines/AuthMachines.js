@@ -12,18 +12,11 @@ export const AuthMachine = createMachine({
         IDLE: {},
         LOGIN: {
             on: {
-                CHANGE_USERNAME: {
-                    actions: assign({
-                        username: (_, event) => event.value,
-                    }),
-                },
-                CHANGE_PASSWORD: {
-                    actions: assign({
-                        password: (_, event) => event.value,
-                    }),
-                },
+                CHANGE_USERNAME: { actions: 'changeUsername' },
+                CHANGE_PASSWORD: { actions: 'changePassword' },
                 SUBMIT_LOGIN: {
-                    actions: (context, _) => send({type: 'LOGIN', username: context.username, password: context.password}, {to: context.tokenMachineRef}),
+                    actions: (context, _) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: context.tokenMachineRef }),
+                    // on:
                     // invoke: {
                     //     src: (context, _) => context.tokenMachineRef,
                     //     id: 'tokenMachines',
@@ -31,7 +24,7 @@ export const AuthMachine = createMachine({
                     // entry: (context, event) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: 'tokenMachines' }),
                     // on: {
                     //     SUCCESS: {
-                            
+
                     //     }
                     // }
                 },
@@ -43,19 +36,19 @@ export const AuthMachine = createMachine({
         //     actions: (context, event) => console.log('context, event', context, event),
         // },
         // LOADING: {
-            // on: {
-            //     CHANGE_USERNAME: {
-            //         actions: assign({
-            //             username: (context, event) => event.value,
-            //         }),
-            //     },
-            // },
-            // type: 'final',
-            // after: {
-            //     500000: {
-            //         target: 'AUTHENTICATION',
-            //     },
-            // },
+        // on: {
+        //     CHANGE_USERNAME: {
+        //         actions: assign({
+        //             username: (context, event) => event.value,
+        //         }),
+        //     },
+        // },
+        // type: 'final',
+        // after: {
+        //     500000: {
+        //         target: 'AUTHENTICATION',
+        //     },
+        // },
         // },
         // fetchingToken: {
         //     invoke: {
@@ -63,24 +56,16 @@ export const AuthMachine = createMachine({
         //     },
         // },
         // AUTHENTICATION: {
-            // invoke: {
-            //     src: 'validateUser',
-            // },
-            // entry: sendParent('SUCCESS_LOGIN'),
-            // entry: (context, event) => console.log(context, event),
+        // invoke: {
+        //     src: 'validateUser',
+        // },
+        // entry: sendParent('SUCCESS_LOGIN'),
+        // entry: (context, event) => console.log(context, event),
         // },
     },
 }, {
-    services: {
-        loginUser: (context, event) => {
-            sendParent('SUCCESS_LOGIN');
-            console.log(context, event.type);
-        },
-    },
-    guards: {
-        userAuthentication: (_, event) => {
-            console.log(event.name);
-            return true;
-        },
+    actions: {
+        changeUsername: assign({ username: (_, event) => event.value }),
+        changePassword: assign({ password: (_, event) => event.value }),
     },
 });

@@ -23,6 +23,11 @@ export const RNMachine = createMachine({
             invoke: {
                 src: (context, _) => context.authMachineRef,
             },
+            on: {
+                SUCCESS_LOGIN: {
+                    target: 'HOME',
+                },
+            },
             // on: {
             //     // CHANGE_USERNAME: {
             //     //     actions: assign({
