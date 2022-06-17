@@ -14,23 +14,20 @@ export const AuthMachine = createMachine({
             on: {
                 CHANGE_USERNAME: { actions: 'changeUsernameAction' },
                 CHANGE_PASSWORD: { actions: 'changePasswordAction' },
-                SUBMIT_LOGIN: [
-                    {
-                        cond: 'checkAccountGuard',
-                        actions: sendParent('SUCCESS_LOGIN'),
-                    },
-                    {
-                        actions: assign({
-                            errorMsg: 'Username tidak diizinkan',
-                        }),
-                    }
-                ]
-                // SUBMIT_LOGIN: {
-                //     cond: 'checkAccountGuard',
-                //     actions: 
-                //     // actions: (context, _) => send({ type: 'LOGIN', username: context.username, password: context.password }, { to: context.tokenMachineRef }),
-                //     // actions: sendParent('SUCCESS_LOGIN')
-                // },
+                // SUBMIT_LOGIN: [
+                //     {
+                //         cond: 'checkAccountGuard',
+                //         actions: sendParent('SUCCESS_LOGIN'),
+                //     },
+                //     {
+                //         actions: assign({
+                //             errorMsg: 'Username tidak diizinkan',
+                //         }),
+                //     },
+                // ],
+                SUBMIT_LOGIN: {
+                    actions: (context, _) => send({type: 'LOGIN', username: context.username, password: context.password}, {to: context.tokenMachineRef}),
+                },
             },
         },
         // LOADING: {
@@ -69,6 +66,6 @@ export const AuthMachine = createMachine({
     guards: {
         checkAccountGuard: (context, _) => {
             return context.username === 'pian';
-        }
-    }
+        },
+    },
 });

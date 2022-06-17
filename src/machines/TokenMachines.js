@@ -11,9 +11,10 @@ export const TokenMachine = createMachine({
     IDLE: {
       on: {
         LOGIN: {
-          actions: assign({
-            tokenTokenMachine: (context, event) => 'alfianDATATOKEN',
-          }),
+          actions: (context, event) => console.log('LOGIN TOKEN', context, event),
+          // actions: assign({
+          //   tokenTokenMachine: (context, event) => 'alfianDATATOKEN',
+          // }),
         },
       },
     },
