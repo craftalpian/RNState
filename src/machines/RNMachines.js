@@ -27,28 +27,13 @@ export const RNMachine = createMachine({
                 SUCCESS_LOGIN: {
                     target: 'HOME',
                 },
-                FAILED_LOGIN: {
-                    // target: 'HOME',
-                },
             },
-            // on: {
-            //     // CHANGE_USERNAME: {
-            //     //     actions: assign({
-            //     //         username: (context, event) => event.value,
-            //     //     }),
-            //     // },
-            //     // SUBMIT: {
-            //     //     // actions: (context, event) =>  console.log(context.username),
-            //     //     actions: (context, event) =>  send({type: 'AUTH', name: context.username}, {to: 'authMachine'}),
-            //     // },
-            //     SUCCESS_LOGIN: {
-            //         target: 'home',
-            //         actions: (_, event) => console.log(event),
-            //     },
-            // },
         },
         HOME: {
             type: 'final',
+        },
+        REGISTER: {
+
         },
     },
 });

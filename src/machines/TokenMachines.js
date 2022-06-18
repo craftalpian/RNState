@@ -1,17 +1,17 @@
 /* eslint-disable prettier/prettier */
 import { createMachine, respond, assign } from 'xstate';
 
-const getToken = () => new Promise((res, rej) => res('token123'));
-
 export const TokenMachine = createMachine({
   id: 'TokenMachine',
-  context: { tokenTokenMachine: null },
+  context: { myToken: null },
+  on: (context, event) => console.log({context, event, 'test': true}),
+  entry: (context, event) => console.log('TokenMachine.. READY', {context, event}),
   initial: 'IDLE',
   states: {
     IDLE: {
       on: {
-        LOGIN: {
-          actions: (context, event) => console.log('LOGIN TOKEN', context, event),
+        login: {
+          actions: () => console.log('test')
           // actions: assign({
           //   tokenTokenMachine: (context, event) => 'alfianDATATOKEN',
           // }),

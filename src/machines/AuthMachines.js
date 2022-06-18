@@ -1,6 +1,15 @@
 /* eslint-disable prettier/prettier */
 import { createMachine, sendParent, assign, send } from 'xstate';
 
+const localMachine = createMachine({
+    id: 'localMachine',
+    on: {
+        LOGIN: {
+            actions: () => console.log('localmachine'),
+        },
+    },
+});
+
 export const AuthMachine = createMachine({
     id: 'AuthMachine',
     context: { username: null, password: null, tokenMachineRef: null, errorMsg: null },
@@ -26,42 +35,16 @@ export const AuthMachine = createMachine({
                 //     },
                 // ],
                 SUBMIT_LOGIN: {
-                    actions: (context, _) => send({type: 'LOGIN', username: context.username, password: context.password}, {to: context.tokenMachineRef}),
+                    actions: 'submitLoginAction',
                 },
             },
         },
-        // LOADING: {
-        // on: {
-        //     CHANGE_USERNAME: {
-        //         actions: assign({
-        //             username: (context, event) => event.value,
-        //         }),
-        //     },
-        // },
-        // type: 'final',
-        // after: {
-        //     500000: {
-        //         target: 'AUTHENTICATION',
-        //     },
-        // },
-        // },
-        // fetchingToken: {
-        //     invoke: {
-        //         src: () => getToken(),
-        //     },
-        // },
-        // AUTHENTICATION: {
-        // invoke: {
-        //     src: 'validateUser',
-        // },
-        // entry: sendParent('SUCCESS_LOGIN'),
-        // entry: (context, event) => console.log(context, event),
-        // },
     },
 }, {
     actions: {
         changeUsernameAction: assign({ username: (_, event) => event.value, errorMsg: null }),
         changePasswordAction: assign({ password: (_, event) => event.value, errorMsg: null }),
+        submitLoginAction: (context, event) => send({type: 'login'}, {to: context.tokenMachineRef}),
     },
     guards: {
         checkAccountGuard: (context, _) => {
