@@ -33,7 +33,7 @@ export const RNMachine = createMachine({
             type: 'final',
         },
         REGISTER: {
-
+            type: 'final',
         },
     },
 });

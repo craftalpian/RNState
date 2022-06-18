@@ -1,15 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { createMachine, sendParent, assign, send } from 'xstate';
 
-const localMachine = createMachine({
-    id: 'localMachine',
-    on: {
-        LOGIN: {
-            actions: () => console.log('localmachine'),
-        },
-    },
-});
-
 export const AuthMachine = createMachine({
     id: 'AuthMachine',
     context: { username: null, password: null, tokenMachineRef: null, errorMsg: null },
