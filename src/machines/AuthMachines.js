@@ -35,7 +35,10 @@ export const AuthMachine = createMachine({
     actions: {
         changeUsernameAction: assign({ username: (_, event) => event.value, errorMsg: null }),
         changePasswordAction: assign({ password: (_, event) => event.value, errorMsg: null }),
-        submitLoginAction: (context, event) => send({type: 'login'}, {to: context.tokenMachineRef}),
+        submitLoginAction: (context, event) => {
+            // console.log({context, event})
+            return send({type: 'login'}, {to: context.tokenMachineRef})
+        },
     },
     guards: {
         checkAccountGuard: (context, _) => {
