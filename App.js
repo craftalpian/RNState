@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Text,
   View,
@@ -8,65 +8,9 @@ import {
   StatusBar,
 } from 'react-native';
 import {useInterpret, useSelector} from '@xstate/react';
-import {useForm, Controller} from 'react-hook-form';
 import {assign, spawn} from 'xstate';
-import {RNMachine, AuthMachine, TokenMachine} from './src/machines';
-import axios from 'axios';
-
-// const LoginPageHookForm = ({}) => {
-//   const {
-//     control,
-//     handleSubmit,
-//     formState: {errors},
-//   } = useForm({
-//     defaultValues: {
-//       firstName: '',
-//       lastName: '',
-//     },
-//   });
-//   const onSubmit = data => console.log(data);
-
-//   return (
-//     <View>
-//       <Controller
-//         control={control}
-//         rules={{
-//           required: true,
-//         }}
-//         render={({field: {onChange, onBlur, value}}) => (
-//           <TextInput
-//             // style={styles.input}
-//             onBlur={onBlur}
-//             onChangeText={onChange}
-//             value={value}
-//             placeholder={'username'}
-//           />
-//         )}
-//         name="firstName"
-//       />
-//       {errors.firstName && <Text>This is required.</Text>}
-
-//       <Controller
-//         control={control}
-//         rules={{
-//           maxLength: 100,
-//         }}
-//         render={({field: {onChange, onBlur, value}}) => (
-//           <TextInput
-//             // style={styles.input}
-//             onBlur={onBlur}
-//             onChangeText={onChange}
-//             value={value}
-//             placeholder={'password'}
-//           />
-//         )}
-//         name="lastName"
-//       />
-
-//       <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-//     </View>
-//   );
-// };
+import {RNMachine, ActionMachine, TokenMachine} from './src/machines';
+import {parent} from './src/machines/parent';
 
 const SplashScreen = props => {
   return (
@@ -132,55 +76,68 @@ const LoginScreen = props => {
 };
 
 const App = props => {
-  // Main Service
-  const RNMachineService = useInterpret(RNMachine, {
+  const ParentMachine = useInterpret(parent, {
     actions: {
-      createAuth: assign({
-        authMachineRef: () =>
-          spawn(
-            AuthMachine.withConfig({
-              actions: {
-                tokenMachine: assign({
-                  tokenMachineRef: () => spawn(TokenMachine, 'tokenMachine'),
-                }),
-              },
-            }),
-            'authMachine',
-          ),
-      }),
+      showLogName: () => console.log('My Name'),
     },
   });
 
-  // Get state from RNMachine
-  const RNMachineState = useSelector(RNMachineService, state => state);
+  const ParentState = useSelector(ParentMachine, state => state);
 
-  // AuthMachine (Ref)
-  const authMachineRef = useSelector(
-    RNMachineService,
-    state => state.context.authMachineRef,
-  );
+  console.log('ParentState', JSON.stringify(ParentState));
 
-  // AuthMachine (State)
-  const authState = useSelector(authMachineRef, state => state);
+  // // Main Service
+  // const RNMachineService = useInterpret(RNMachine, {
+  //   actions: {
+  //     createAction: assign({
+  //       authMachineRef: () =>
+  //         spawn(
+  //           ActionMachine.withConfig({
+  //             actions: {
+  //               tokenMachine: assign({
+  //                 tokenMachineRef: () => spawn(TokenMachine, 'tokenMachine'),
+  //               }),
+  //             },
+  //           }),
+  //           'authMachine',
+  //         ),
+  //     }),
+  //   },
+  // });
 
-  // TokenMachine (Ref)
-  const tokenMachineRef = useSelector(
-    authMachineRef,
-    state => state.context.tokenMachineRef,
-  );
+  // // Get state from RNMachine
+  // const RNMachineState = useSelector(RNMachineService, state => state);
 
-  // TokenMachine (State)
-  const tokenState = useSelector(tokenMachineRef, state => state);
+  // console.log(RNMachineState.value);
 
-  // Change context inside AuthMachine
-  const change = (type, value) => authMachineRef.send({type, value});
+  // // AuthMachine (Ref)
+  // const authMachineRef = useSelector(
+  //   RNMachineService,
+  //   state => state.context.authMachineRef,
+  // );
+
+  // // AuthMachine (State)
+  // const authState = useSelector(authMachineRef, state => state);
+
+  // // TokenMachine (Ref)
+  // const tokenMachineRef = useSelector(
+  //   authMachineRef,
+  //   state => state.context.tokenMachineRef,
+  // );
+
+  // // TokenMachine (State)
+  // const tokenState = useSelector(tokenMachineRef, state => state);
+
+  // // Change context inside AuthMachine
+  // const change = (type, value) => authMachineRef.send({type, value});
 
   // Logging
   // console.log({'authState.context': authState.context})
 
   return (
     <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
-      {RNMachineState.matches('SPLASH') && <SplashScreen />}
+      <SplashScreen />
+      {/* {RNMachineState.matches('SPLASH') && <SplashScreen />}
       {RNMachineState.matches('HOME') && (
         <View
           style={{
@@ -201,7 +158,7 @@ const App = props => {
             errorMsg={authState.context.errorMsg}
           />
         </View>
-      )}
+      )} */}
     </View>
   );
 };

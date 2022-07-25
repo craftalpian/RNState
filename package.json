@@ -10,11 +10,15 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-navigation/native": "^6.0.11",
+    "@react-navigation/native-stack": "^6.7.0",
     "@xstate/react": "^3.0.0",
     "axios": "^0.27.2",
     "react": "17.0.2",
     "react-hook-form": "^7.32.1",
     "react-native": "0.68.2",
+    "react-native-safe-area-context": "^4.3.1",
+    "react-native-screens": "^3.15.0",
     "xstate": "^4.32.1"
   },
   "devDependencies": {
