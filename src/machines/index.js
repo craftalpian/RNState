@@ -1,5 +1,3 @@
 /* eslint-disable prettier/prettier */
-export * from './RNMachines';
-export * from './ActionMachines';
-export * from './LoginFormMachines';
-export * from './TokenMachines';
+export * from './credential-machine';
+export * from './screen-machine';
